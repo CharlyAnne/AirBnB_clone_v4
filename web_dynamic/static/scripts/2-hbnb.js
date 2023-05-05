@@ -25,8 +25,8 @@ $(function () {
   $.ajax({
     type: 'GET',
     url: 'http://127.0.0.1:5001/api/v1/status/',
-    success: (data) => {
-      if (data.status === 200) {
+    success: (data, statusMsg, req) => {
+      if (req.status === 200) {
         statusMode.addClass('available');
       }
     },

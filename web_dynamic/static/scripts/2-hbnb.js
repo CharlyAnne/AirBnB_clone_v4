@@ -20,14 +20,14 @@ $(function () {
   });
   
   //Requesting api status
-  const stat = $('div#api_status');
+  const statusRes = $('div#api_status');
   
   $.ajax({
     type: 'GET',
     url: 'http://127.0.0.1:5001/api/v1/status/',
-    success: (data, textStatus, jqXHR) => {
+    success: (data, jqXHR) => {
       if (jqXHR.status === "OK") {
-        stat.addClass('available');
+        statusRes.addClass('available');
       }
     },
     error: () => {

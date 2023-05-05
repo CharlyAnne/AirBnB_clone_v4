@@ -22,16 +22,11 @@ $(function () {
   //Requesting api status
   const statusRes = $('div#api_status');
   
-  $.ajax({
-    type: 'GET',
-    url: 'http://127.0.0.1:5001/api/v1/status/',
-    success: (data, jqXHR) => {
-      if (jqXHR.status === "OK") {
-        statusRes.addClass('available');
-      }
-    },
-    error: () => {
-      stat.removeClass('available');
-    }
-  });
+  $.getJSON("http://0.0.0.0:5001/api/v1/status/", (data) => {
+		if (data.status === 200) {
+			statusRes.addClass("available");
+		} else {
+			statusRes.removeClass("available");
+		}
+	});
 });

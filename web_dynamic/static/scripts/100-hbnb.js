@@ -1,4 +1,5 @@
 $(function () {
+  //task 3
   const checkbox = $('.amenity_checkbox');
   const locationBox = $('.location_checkbox')
   selectedBoxes = {}
@@ -7,7 +8,7 @@ $(function () {
   checkbox.on('change', (e) => registerChecked(e, checkedAmenities));
   locationBox.on('change', (e) => registerChecked(e, selectedBoxes))
 
-  // Requesting api status
+  // Requesting api status || task 4
   const statusRes = $('#api_status');
 
   $.ajax({
@@ -24,11 +25,9 @@ $(function () {
     fail: (error) => { console.log(error); }
   });
 
-  // To fetch data about Place
+  // To fetch data about Place || task 5
   requestPlaces({});
-});
-
-function requestPlaces (filter) {
+  function requestPlaces (filter) {
   const places = $('section.places');
   places.empty();
 
@@ -60,6 +59,7 @@ function requestPlaces (filter) {
     error: (xhr, staus, error) => { console.log(error); }
   });
 }
+// Task 6
 function registerChecked(e, collection) {
     const itemId = e.target.id;
     const itemName = e.target.name;
@@ -76,3 +76,5 @@ function registerChecked(e, collection) {
     const selectedAmenities = Object.values(checkedAmenities).join(', ');
     $('.amenities h4').text(selectedAmenities);
   }
+  
+});

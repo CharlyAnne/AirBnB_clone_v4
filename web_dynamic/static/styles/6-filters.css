@@ -96,12 +96,14 @@ button:hover {
 .popover ul li{
     padding: 4px;
     padding-left: 10px;
+    width: 100%;
 }
 
 .popover ul h2{
     margin-top: 1.5%;
     margin-bottom: 5%;
     margin-left: 0px;
+    display: inline;
 }
 
 .amenities:hover .popover,

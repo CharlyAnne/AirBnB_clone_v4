@@ -42,6 +42,7 @@ $(function () {
 
 function requestPlaces (filter) {
   const places = $('section.places');
+  places.empty();
 
   $.ajax({
     type: 'POST',
@@ -55,7 +56,7 @@ function requestPlaces (filter) {
       if (resp.status === 200) {
         data.forEach(place => {
           const article = $('<article></article>');
-          const price = $(`<div><h2>${place.price_by_night}</h2></div>`).addClass('price_by_night');
+          const price = $(`<div><h2>$${place.price_by_night}</h2></div>`).addClass('price_by_night');
           const title = $('<div></div>').addClass('title_box').append(`<h2>${place.name}</h2>`, price);
           const info = $('<div></div>').addClass('information');
           const rooms = $(`<div>${place.number_rooms}</div>`).addClass('number_rooms');

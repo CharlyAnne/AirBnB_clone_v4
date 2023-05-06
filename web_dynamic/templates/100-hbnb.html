@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+	  <!-- ==== CSS sheets ===== -->
     <link rel="stylesheet" type="text/css" href="../static/styles/4-common.css?{{ cache_id }}" />
     <link rel="stylesheet" type="text/css" href="../static/styles/3-header.css?{{ cache_id }}" />
     <link rel="stylesheet" type="text/css" href="../static/styles/3-footer.css?{{ cache_id }}" />
@@ -9,16 +10,20 @@
     <link type="text/css" rel="stylesheet" href="../static/styles/8-places.css?{{ cache_id }}" />
     <link rel="icon" href="../static/images/icon.png?{{ cache_id }}" />
     <title>HBnB</title>
+	  <!-- ==== JavaScript ===-->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="../static/scripts/100-hbnb.js?{{ cache_id }}"></script>
   </head>
   <body>
+	  <!--==== HEADER=====-->
     <header>
       <div class="logo"></div>
       <div id="api_status"></div>
     </header>
     <div class="container">
+	    <!--===== FILTERS =====-->
       <section class="filters">
+	      <!--=====LOCATIONS=====-->
 	<div class="locations">
 	  <h3>States</h3>
 	  <h4>&nbsp;</h4>
@@ -26,20 +31,19 @@
 	    <ul>
 	      {% for state in states %}
 	      <li>
-			<input type="checkbox" data-id=":state_id" data-name=":state_name">
-			<h2>{{ state[0].name }}:</h2>
-			<ul>
-				{% for city in state[1] %}
-				<li>
-					<input type="checkbox" data-id=":city_id" data-name=":city_name">
-					{{ city.name }}</li>
-				{% endfor %}
-			</ul>
-	      </li>
+              	<h2><input type="checkbox" class="stateCheckout" data-id="{{ state[0].id }}" data-name="{{ state[0].name }}"> {{ state[0].name }}:</h2>
+              	<ul>
+                	{% for city in state[1] %}
+                	<li><input type="checkbox" class="cityCheckout" data-id="{{ city.id }}"
+                    		data-name="{{city.name}}">{{ city.name }}</li>
+                	{% endfor %}
+              	</ul>
+              </li>
 	      {% endfor %}
 	    </ul>
 	  </div>
 	</div>
+	      <!--=====AMENITIES=====-->
 	<div class="amenities">
 	  <h3>Amenities</h3>
 	  <h4></h4>
@@ -47,22 +51,25 @@
 	    <ul>
 	      {% for amenity in amenities %}
 	      <li>
-		  <label>
-			  <input class="amenity_checkbox" type="checkbox" data-id="{{ amenity.id }}" data-name="{{ amenity.name }}">{{ amenity.name }}
-		  </label>
+	      	<input class="amenity_checkbox" type="checkbox" data-id="{{ amenity.id }}" data-name="{{ amenity.name }}">{{ amenity.name }}
 	      </li>
 	      {% endfor %}
 	    </ul>
 	  </div>
 	</div>
+	      <!--=====SEARCH BUTTON=====-->
 	<button type="button">Search</button>
       </section>
-      <div class="placesh1"><h1>Places</h1></div>
+      <div class="placesh1">
+      	<h1>Places</h1>
+	      <!-- TO BAEGIN A PLACE -->
+      </div>
       <section class="places">
 	<!-- <h1>Places</h1> -->
   
       </section>
       </div>
+	  <!--=====FOOTER=====-->
     <footer>
       <p>Holberton School</p>
     </footer>

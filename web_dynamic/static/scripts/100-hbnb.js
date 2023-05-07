@@ -1,12 +1,18 @@
-$(function () {
-  //task 3
+$(function (e) {
+  // task 3
   const checkbox = $('.amenity_checkbox');
-  const locationBox = $('.location_checkbox')
-  selectedBoxes = {}
-  const checkedAmenities = {};
+  const stateBox = $('.stateCheckout');
+  const cityBox = $('.cityCheckout');
 
-  checkbox.on('change', (e) => registerChecked(e, checkedAmenities));
-  locationBox.on('change', (e) => registerChecked(e, selectedBoxes))
+  cityBox.on('change', (e) => {
+    handleEvent(e, 'city');
+  });
+  stateBox.on('change', (e) => {
+    handleEvent(e, 'state');
+  });
+  checkbox.on('change', (e) => {
+    handleEvent(e, 'amenity');
+  });
 
   // Requesting api status || task 4
   const statusRes = $('#api_status');
@@ -24,22 +30,23 @@ $(function () {
     },
     fail: (error) => { console.log(error); }
   });
-
-  // To fetch data about Place || task 5
-  requestPlaces({});
-  function requestPlaces (filter) {
+  handleEvent(e, 'all');
+});
+// To fetch data about Place || task 5
+function requestPlaces (filter) {
   const places = $('section.places');
   places.empty();
 
   $.ajax({
     type: 'POST',
     url: 'http://127.0.0.1:5001/api/v1/places_search/',
-    data: JSON.stringify((filter) || {}),
+    data: JSON.stringify((filter)),
     contentType: 'application/json',
     headers: {
       accept: 'application/json'
     },
     success: (data, statuPhrase, resp) => {
+      console.log(data);
       if (resp.status === 200) {
         data.forEach(place => {
           const article = $('<article></article>');
@@ -60,22 +67,19 @@ $(function () {
   });
 }
 // Task 6
-/*function registerChecked(e, collection) {
-    const itemId = e.target.id;
-    const itemName = e.target.name;
+function registerChecked (e, collection) {
+  const itemId = $(e.target).data('id');
 
-    if (e.target.checked) {
-      // Add amenity id and name to object if checkbox is checked
-      collection[itemId] = itemName;
-    } else {
-      // Remove amenity id and name from object if checkbox is unchecked
-      delete collection[itemId];
-    }
-    requestPlaces(collection);
-    // update the text of the <h4> element with the names of the checked amenities
-    const selectedAmenities = Object.values(checkedAmenities).join(', ');
-    $('.amenities h4').text(selectedAmenities);
-  }*/
+  if (e.target.checked) {
+    // Add amenity id and name to object if checkbox is checked
+    collection.push(itemId);
+  } else {
+    // Remove amenity id and name from object if checkbox is unchecked
+    collection.splice(collection.indexOf(itemId), 1);
+  }
+  return collection;
+}
+/*
   $('.stateCheckbox').click(function () {
     if ($(this).prop('checked')) {
       stateIds[$(this).attr('data-id')] = $(this).attr('data-name');
@@ -92,7 +96,7 @@ $(function () {
   $('.cityCheckBox').click(function () {
     if ($(this).prop('checked')) {
       cityIds[$(this).attr('data-id')] = $(this).attr('data-name');
-    } else if 
+    } else if
       (!$(this).prop('checked')) {
         delete cityIds[$(this).attr('data-id')];
     }
@@ -102,5 +106,24 @@ $(function () {
       $('.locations h4').text(Object.values(cityIds).concat(Object.values(
                                                   stateIds)).join(', '));
     }
+  }); */
+function handleEvent (e, boxType) {
+  let cityBoxes = (localStorage.getItem('checkedCities')) ? localStorage.getItem('checkedCities').split(',') : [];
+  let stateBoxes = (localStorage.getItem('checkedStates')) ? localStorage.getItem('checkedStates').split(',') : [];
+  let checkedAmenities = (localStorage.getItem('checkedAms')) ? localStorage.getItem('checkedAms').split(',') : [];
+  if (boxType === 'city') {
+    cityBoxes = registerChecked(e, cityBoxes);
+    localStorage.setItem('checkedCities', cityBoxes);
+  } else if (boxType === 'state') {
+    stateBoxes = registerChecked(e, stateBoxes);
+    localStorage.setItem('checkedStates', stateBoxes);
+  } else if (boxType === 'amenity') {
+    checkedAmenities = registerChecked(e, checkedAmenities);
+    localStorage.setItem('checkedAms', checkedAmenities);
+  }
+  requestPlaces({
+    states: stateBoxes,
+    cities: cityBoxes,
+    amenities: checkedAmenities
   });
-});
+}

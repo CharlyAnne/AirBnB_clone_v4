@@ -18,15 +18,15 @@ $(function () {
     const selectedAmenities = Object.values(checkedAmenities).join(', ');
     $('.amenities h4').text(selectedAmenities);
   });
-  
-  //Requesting api status
+
+  // Requesting api status
   const statusRes = $('div#api_status');
-  
-  $.getJSON("http://0.0.0.0:5001/api/v1/status/", (data) => {
-		if (data.status === 200) {
-			statusRes.addClass("available");
-		} else {
-			statusRes.removeClass("available");
-		}
-	});
+
+  $.getJSON('http://0.0.0.0:5001/api/v1/status/', (data) => {
+    if (data.status === 200) {
+      statusRes.addClass('available');
+    } else {
+      statusRes.removeClass('available');
+    }
+  });
 });

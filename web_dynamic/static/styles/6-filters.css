@@ -6,6 +6,7 @@
     border: 1px solid #DDDDDD;
     border-radius: 4px;
 }
+
 button {
     position: absolute;
     font-size: 18px;
@@ -21,6 +22,7 @@ button {
 button:hover {
     opacity: 0.9;
 }
+
 .filters div {
     display: inline-grid;
 }
@@ -41,16 +43,26 @@ button:hover {
     font-weight: 400;
     font-size: 14px;
 }
+
 .locations {
     height: 100%;
     width: 25%;
     border-right: 1px solid #DDDDDD;
 }
+.locations h2 {
+  display: inline-block;
+}
+.locations h4 {
+    height: 17px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .amenities {
     height: 100%;
     width: 25%;
 }
-
 .amenities h4 {
     height: 17px;
     overflow: hidden;
@@ -70,21 +82,17 @@ button:hover {
     scrollbar-width: none;
     max-height: 300px;
 }
-
 .popover::-webkit-scrollbar{
     width: 0px;
 }
-
 .amenities .popover {
     padding: 10px 0;
     margin-left: -5px;
     margin-top: 0%;
 }
-
 .amenities .popover ul{
     margin: 0px;
 }
-
 .locations .popover {
     margin-top: 0%;
 }
@@ -98,18 +106,17 @@ button:hover {
     padding-left: 10px;
     width: 100%;
 }
-
 .popover ul h2{
     margin-top: 1.5%;
     margin-bottom: 5%;
     margin-left: 0px;
     display: inline;
 }
-
 .amenities:hover .popover,
 .locations:hover .popover {
     visibility: visible;
 }
-.amenity_checkbox {
+
+.state_checkbox, .city_checkbox, .amenity_checkbox {
     margin-right: 10px;
 }

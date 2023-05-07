@@ -60,7 +60,7 @@ $(function () {
   });
 }
 // Task 6
-function registerChecked(e, collection) {
+/*function registerChecked(e, collection) {
     const itemId = e.target.id;
     const itemName = e.target.name;
 
@@ -75,6 +75,32 @@ function registerChecked(e, collection) {
     // update the text of the <h4> element with the names of the checked amenities
     const selectedAmenities = Object.values(checkedAmenities).join(', ');
     $('.amenities h4').text(selectedAmenities);
-  }
-  
+  }*/
+  $('.stateCheckbox').click(function () {
+    if ($(this).prop('checked')) {
+      stateIds[$(this).attr('data-id')] = $(this).attr('data-name');
+    } else if (!$(this).prop('checked')) {
+      delete stateIds[$(this).attr('data-id')];
+    }
+    if (Object.keys(stateIds).length === 0 && Object.keys(cityIds).length === 0) {
+      $('.locations h4').html('&nbsp;');
+    } else {
+      $('.locations h4').text(Object.values(stateIds).concat(
+                          Object.values(cityIds)).join(', '));
+    }
+  });
+  $('.cityCheckBox').click(function () {
+    if ($(this).prop('checked')) {
+      cityIds[$(this).attr('data-id')] = $(this).attr('data-name');
+    } else if 
+      (!$(this).prop('checked')) {
+        delete cityIds[$(this).attr('data-id')];
+    }
+    if (Object.keys(stateIds).length === 0 && Object.keys(cityIds).length === 0) {
+      $('.locations h4').html('&nbsp;');
+    } else {
+      $('.locations h4').text(Object.values(cityIds).concat(Object.values(
+                                                  stateIds)).join(', '));
+    }
+  });
 });

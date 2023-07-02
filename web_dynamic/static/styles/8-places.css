@@ -52,14 +52,15 @@
 .price_by_night {
     display: flex;
     height: 60px;
-    min-width: 90px;
+    min-width: 60px;
+    font-size: 30px;
     justify-content: center;
-    color: #FF5A5F;
     align-items: center;
+    color: #FF5A5F;
     border: 4px solid #FF5A5F;
     border-radius: 50%;
+    align-items: center;
     padding: 2.3%;
-    font-size: 30px;
 }
 
 .information {
@@ -97,4 +98,25 @@
 
 .user {
   margin-bottom: 1.5%;
+}
+
+.reviews {
+	margin-top: 40px;
+}
+
+.reviews h2 {
+	font-size: 16px;
+	border-bottom: 1px solid #DDDDDD;
+}
+
+.reviews ul li h3 {
+	font-size: 14px;
+}
+
+.reviews ul li p {
+	font-size: 12px;
+}
+
+.reviews h2 span {
+	float: right;
 }

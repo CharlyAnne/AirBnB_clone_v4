@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Starts a Flash Web Application"""
+""" Starts a Flash Web Application """
 import uuid
 from models import storage
 from models.state import State
@@ -19,7 +19,7 @@ def close_db(error):
     storage.close()
 
 
-@app.route('/0-hbnb', strict_slashes=False)
+@app.route('/0-hbnb/', strict_slashes=False)
 def hbnb():
     """ HBNB is alive! """
     cache_id = uuid.uuid4()

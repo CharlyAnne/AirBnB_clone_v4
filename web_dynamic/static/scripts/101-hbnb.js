@@ -2,6 +2,7 @@ $(function () {
   const checkedAmenities = {};
   const checkedStates = {};
   const checkedCities = {};
+  const places_id = [];
 
   // Add amenity to list
   const amenityCheckbox = $('.amenity_checkbox');
@@ -81,11 +82,23 @@ $(function () {
         populate(data);
       }
     }
-  });
+  }).promise().done(() => {
+    // add reviews
+  $("article span").on('click', function() {
+      if ($(this).text() === 'show'){
+			displayReviews($(this).closest('article'));
+			$(this).text('hide');
+		  } else {
+			  removeReviews($(this).closest('article'));
+			  $(this).text('show');
+		}
+    });
+    });
 
   function populate (data) {
     data.forEach((place, i, arr) => {
       const article = document.createElement('article');
+      $(article).attr('id', place.id);
 
       const title = document.createElement('div');
       const title_name = document.createElement('h2');
@@ -101,6 +114,11 @@ $(function () {
       const desc = document.createElement('div');
       const section = $('section.places');
 
+	const reviews = $('<div>');
+	const reviews_title = $('<h2>');
+	const reviews_title_span = $('<span>');
+	
+	places_id.push(place.id);
       $(title).addClass('title_box');
       $(title_name).text(place.name);
       $(title_price).addClass('price_by_night');
@@ -126,14 +144,65 @@ $(function () {
       } else {
         $(desc).text('safe');
       }
+	$(reviews).addClass('reviews');
+	$(reviews_title).text('Reviews');
+	$(reviews_title_span).text('show');
+	$(reviews_title).append(reviews_title_span);
+	$(reviews).append(reviews_title);
 
       $(title).append(title_name).append(title_price);
       $(info).append(info_guest).append(info_rooms).append(info_brooms);
-      $(article).append(title).append(info).append(user).append(desc);
+      $(article).append(title).append(info).append(user).append(desc).append(reviews);
       section.append(article);
     });
   }
 
+// display reviews
+
+  function displayReviews(p_a){
+	const place_id = $(p_a).attr('id');
+	$.ajax({
+    	  type: 'GET',
+    	  url: 'http://127.0.0.1:5001/api/v1/places/'+place_id+'/reviews',
+    	  success: (data, textStatus, jqXHR) => {
+      	  	if (jqXHR.status === 200) {
+      			let usernames = getUsers(data);
+            console.log(usernames);
+			const list = $('<ul>');
+			data.forEach((rvw, ix, jx) => {
+        console.log(usernames);
+				const userDate = $('<h3>').text(usernames[ix]+ ' ' + rvw.updated_at);
+				const p = $('<p>').html(rvw.text);
+				const li = $('<li>').append(userDate).append(p);
+				list.append(li);
+			});
+			p_a.find('.reviews').append(list);
+		}
+	  },
+    	  error: (error) => {
+      		console.log(error.status);
+    	  }
+  	});		
+  }
+// getUsers
+function getUsers(reviews){
+  let users = [];
+  reviews.forEach((review, ix, arr) => {
+	$.ajax({
+          type: 'GET',
+          url: 'http://127.0.0.1:5001/api/v1/users/'+review.user_id,
+          success: (u_data, stat, jX) => {
+          	users.push(u_data.first_name + ' ' + u_data.last_name);
+            	}
+          });
+    //console.log(users);
+  	});
+  return users;
+}
+// remove_reviews
+function removeReviews(p_a){
+	p_a.find('.reviews').find('ul').remove();
+}
 // filter places based on checked amenities when button clicked
 
 $('button').on('click', () => {
@@ -148,6 +217,17 @@ $('button').on('click', () => {
         populate(data);
       }
     }
-  });		
+  }).promise().done(() => {
+    // add reviews
+  $("article span").on('click', function() {
+      if ($(this).text() === 'show'){
+			displayReviews($(this).closest('article'));
+			$(this).text('hide');
+		  } else {
+			  removeReviews($(this).closest('article'));
+			  $(this).text('show');
+		}
+    });
+    });
 });
 });

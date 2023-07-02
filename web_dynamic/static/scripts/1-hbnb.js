@@ -14,7 +14,7 @@ $(function () {
       delete checkedAmenities[amenityId];
     }
 
-    // update text of <h4> with the names of the checked amenities
+    // update the text of the <h4> element with the names of the checked amenities
     const selectedAmenities = Object.values(checkedAmenities).join(', ');
     $('.amenities h4').text(selectedAmenities);
   });

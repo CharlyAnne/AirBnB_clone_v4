@@ -19,14 +19,18 @@ $(function () {
     $('.amenities h4').text(selectedAmenities);
   });
 
-  // Requesting api status
-  const statusRes = $('div#api_status');
+  const stat = $('div#api_status');
 
-  $.getJSON('http://0.0.0.0:5001/api/v1/status/', (data) => {
-    if (data.status === 200) {
-      statusRes.addClass('available');
-    } else {
-      statusRes.removeClass('available');
+  $.ajax({
+    type: 'GET',
+    url: 'http://127.0.0.1:5001/api/v1/status/',
+    success: (data, textStatus, jqXHR) => {
+      if (jqXHR.status === 200) {
+        stat.addClass('available');
+      }
+    },
+    error: () => {
+      stat.removeClass('available');
     }
   });
 });

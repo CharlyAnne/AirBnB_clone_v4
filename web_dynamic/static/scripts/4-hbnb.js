@@ -13,62 +13,109 @@ $(function () {
       // Remove amenity id and name from object if checkbox is unchecked
       delete checkedAmenities[amenityId];
     }
-    requestPlaces(checkedAmenities);
     // update the text of the <h4> element with the names of the checked amenities
     const selectedAmenities = Object.values(checkedAmenities).join(', ');
     $('.amenities h4').text(selectedAmenities);
   });
 
-  // Requesting api status
-  const statusRes = $('#api_status');
+  // update the api status
+
+  const stat = $('div#api_status');
 
   $.ajax({
-    url: 'http://0.0.0.0:5001/api/v1/status/',
     type: 'GET',
-    success: (data) => {
-      if (data.status === 200) {
-        console.log('Hello');
-        statusRes.addClass('available');
-      } else {
-        statusRes.removeClass('available');
+    url: 'http://127.0.0.1:5001/api/v1/status/',
+    success: (data, textStatus, jqXHR) => {
+      if (jqXHR.status === 200) {
+        stat.addClass('available');
       }
     },
-    fail: (error) => { console.log(error); }
+    error: () => {
+      stat.removeClass('available');
+    }
   });
 
-  // To fetch data about Place
-  requestPlaces({});
-});
+  // populate the places section with data
 
-function requestPlaces (filter) {
   const places = $('section.places');
-  places.empty();
 
   $.ajax({
     type: 'POST',
     url: 'http://127.0.0.1:5001/api/v1/places_search/',
-    data: JSON.stringify((filter) || {}),
+    data: JSON.stringify({}),
     contentType: 'application/json',
-    headers: {
-      accept: 'application/json'
-    },
-    success: (data, statuPhrase, resp) => {
-      if (resp.status === 200) {
-        data.forEach(place => {
-          const article = $('<article></article>');
-          const price = $(`<div><h2>$${place.price_by_night}</h2></div>`).addClass('price_by_night');
-          const title = $('<div></div>').addClass('title_box').append(`<h2>${place.name}</h2>`, price);
-          const info = $('<div></div>').addClass('information');
-          const rooms = $(`<div>${place.number_rooms}</div>`).addClass('number_rooms');
-          const bathRooms = $(`<div>${place.number_bathrooms}</div>`).addClass('number_rooms');
-          const guests = $(`<div>${place.max_guest}</div>`).addClass('max_guest');
-          const description = $(`<div>${place.description}</div>`).addClass('description');
-          info.append(guests, rooms, bathRooms);
-          article.append(title, info, description);
-          places.append(article);
-        });
+    success: (data, textStatus, jqXHR) => {
+      if (jqXHR.status === 200) {
+        populate(data);
       }
-    },
-    error: (xhr, staus, error) => { console.log(error); }
+    }
   });
-}
+
+  function populate (data) {
+    data.forEach((place, i, arr) => {
+      const article = document.createElement('article');
+
+      const title = document.createElement('div');
+      const title_name = document.createElement('h2');
+      const title_price = document.createElement('div');
+
+      const info = document.createElement('div');
+      const info_guest = document.createElement('div');
+      const info_rooms = document.createElement('div');
+      const info_brooms = document.createElement('div');
+
+      const user = document.createElement('div');
+
+      const desc = document.createElement('div');
+      const section = $('section.places');
+
+      $(title).addClass('title_box');
+      $(title_name).text(place.name);
+      $(title_price).addClass('price_by_night');
+      $(title_price).text(place.price_by_night);
+
+      $(info).addClass('information');
+      $(info_guest).addClass('max_guest');
+      let pl = place.max_guest === 1 ? '' : 's';
+      $(info_guest).text(place.max_guest + 'Guest' + pl);
+      pl = place.number_rooms === 1 ? '' : 's';
+      $(info_rooms).addClass('number_rooms');
+      $(info_rooms).text(place.number_rooms + 'Bedroom' + pl);
+      $(info_brooms).addClass('number_bathrooms');
+      pl = place.number_bathrooms === 1 ? '' : 's';
+      $(info_brooms).text(place.number_bathrooms + 'Bathroom' + pl);
+
+      $(user).addClass('user');
+      if (place.user) $(user).append(place.user.first_name + ' ' + place.user.last_name); // todo: check for user.first_name and user.last_name
+
+      $(desc).addClass('description');
+      if (place.description) {
+        $(desc).html(place.description);
+      } else {
+        $(desc).text('safe');
+      }
+
+      $(title).append(title_name).append(title_price);
+      $(info).append(info_guest).append(info_rooms).append(info_brooms);
+      $(article).append(title).append(info).append(user).append(desc);
+      section.append(article);
+    });
+  }
+
+// filter places based on checked amenities when button clicked
+
+$('button').on('click', () => {
+  $.ajax({
+    type: 'POST',
+    url: 'http://127.0.0.1:5001/api/v1/places_search/',
+    data: JSON.stringify({"amenities": Object.keys(checkedAmenities)}),
+    contentType: 'application/json',
+    success: (data, textStatus, jqXHR) => {
+      if (jqXHR.status === 200) {
+	      $('section.places').empty();
+        populate(data);
+      }
+    }
+  });		
+});
+});

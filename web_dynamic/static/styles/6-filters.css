@@ -46,6 +46,15 @@ button:hover {
     width: 25%;
     border-right: 1px solid #DDDDDD;
 }
+.locations h2 {
+    display: inline-block;
+}
+.locations h4 {
+    height: 17px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 .amenities {
     height: 100%;
     width: 25%;
@@ -57,7 +66,6 @@ button:hover {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-
 .popover {
     visibility: hidden;
     width: 100%;
@@ -86,7 +94,7 @@ button:hover {
 }
 
 .locations .popover {
-    margin-top: 0%;
+    margin-top: 0px;
 }
 .popover ul {
     list-style-type: none;
@@ -96,20 +104,19 @@ button:hover {
 .popover ul li{
     padding: 4px;
     padding-left: 10px;
-    width: 100%;
 }
 
 .popover ul h2{
     margin-top: 1.5%;
     margin-bottom: 5%;
     margin-left: 0px;
-    display: inline;
 }
 
 .amenities:hover .popover,
 .locations:hover .popover {
     visibility: visible;
 }
-.amenity_checkbox {
+
+.amenity_checkbox, .state_checkbox, .city_checkbox {
     margin-right: 10px;
 }
